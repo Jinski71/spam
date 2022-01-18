@@ -144,7 +144,7 @@ def main():
     
     model, tokenizer = load_trained_model()
 
-    sentences = tokenizer.texts_to_sequences(data['content'][:10])
+    sentences = tokenizer.texts_to_sequences(data['content'])
     sentences = pad_sequences(sentences, maxlen = 512)
 
     prob = inference(model, sentences)
