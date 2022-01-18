@@ -149,8 +149,9 @@ def main():
 
     prob = inference(model, sentences)
  
-    print(f"Spam Probability: {prob*100}%")
- 
+    data['spam_probability'] = prob
+    
+    print(data)
     # morphs = split_morphs(data)
     # data = join(morphs, data)
     # X_train, X_test, y_train, y_test = split_dataset(data)
