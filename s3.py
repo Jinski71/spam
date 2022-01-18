@@ -129,6 +129,10 @@ def main():
     data_review, data_log = data_loader()
     df_review = pq2df_transformer(data_review)
     df_log = pq2df_transformer(data_log)
+
+    df_review = df_review[:10]
+    df_log = df_log[:10]
+
     data = preprocessing(df_review, df_log) 
     #data = preprocessing(data_review, data_log) 
     print(data)
