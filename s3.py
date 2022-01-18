@@ -120,9 +120,7 @@ def load_trained_model():
 
 @timer
 def inference(model, data):
-    print(model.predict(data))
-    prob = round(model.predict(data)[0][0] * 100, 2)
-    return prob
+    return model.predict(data)
 
 @timer
 def main():
@@ -151,8 +149,7 @@ def main():
 
     prob = inference(model, sentences)
  
-    print(prob)
-    #print(f"Spam Probability: {prob}%")
+    print(f"Spam Probability: {prob*100}%")
  
     # morphs = split_morphs(data)
     # data = join(morphs, data)
