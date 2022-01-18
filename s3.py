@@ -147,9 +147,8 @@ def main():
     sentences = tokenizer.texts_to_sequences(data['content'])
     sentences = pad_sequences(sentences, maxlen = 512)
 
-    probs = inference(model, sentences)
- 
-    data['spam_probability'] = [round(prob, 2) * 100 for prob in probs]
+    probs = inference(model, sentences) 
+    data['spam_probability'] = [round(prob * 100, 2) for prob in probs]
     
     print(data)
     # morphs = split_morphs(data)
