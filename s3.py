@@ -3,6 +3,7 @@
 import s3fs
 import pyarrow.parquet as pq
 import pandas as pd
+import numpy as np
 
 import pickle
 import sys
