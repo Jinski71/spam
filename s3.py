@@ -111,7 +111,9 @@ def postprocess(data):
  
 @timer
 def main():
-    data_review, data_log = data_loader()
+    data_review = pd.read_csv("apt_review_20220106.zip", encoding="UTF-8")
+    data_log = pd.read_csv('abuse_process_log_20220106.zip', encoding="UTF-8")
+    #data_review, data_log = data_loader()
     df_review = pq2df_transformer(data_review)
     df_log = pq2df_transformer(data_log)
     data = preprocessing(df_review, df_log) 
