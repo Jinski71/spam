@@ -11,7 +11,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import load_model
 from konlpy.tag import Mecab
 
-os.environ["CUDA_VISIBLE_DEVICES"]='0'
+os.environ["CUDA_VISIBLE_DEVICES"]=''
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 def set_pandas_display_options() -> None:
@@ -126,8 +126,8 @@ def main():
     df_review = pq2df_transformer(data_review)
     df_log = pq2df_transformer(data_log)
 
-    df_review = df_review[:100000]
-    df_log = df_log[:100000]
+    df_review = df_review[:10]
+    df_log = df_log[:10]
 
     data = preprocessing(df_review, df_log) 
     #data = preprocessing(data_review, data_log)  
