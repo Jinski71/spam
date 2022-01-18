@@ -120,7 +120,8 @@ def load_trained_model():
 
 @timer
 def inference(model, data):
-    round(model.predict(data)[0] * 100, 2)
+    prob = round(model.predict(data)[0][0] * 100, 2)
+    return prob
 
 @timer
 def main():
