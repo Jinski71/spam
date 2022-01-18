@@ -53,6 +53,7 @@ def data_loader():
 def pq2df_transformer(data):
     table = data.read()
     df = table.to_pandas()
+    return df
 
 @timer
 def preprocessing(data_review, data_log):
@@ -123,13 +124,13 @@ def inference(model, data):
 
 @timer
 def main():
-    data_review = pd.read_csv("../apt_review_20220106.csv", encoding="UTF-8")
-    data_log = pd.read_csv('../abuse_process_log_20220106.csv', encoding="UTF-8")
-    #data_review, data_log = data_loader()
-    #df_review = pq2df_transformer(data_review)
-    #df_log = pq2df_transformer(data_log)
-    #data = preprocessing(df_review, df_log) 
-    data = preprocessing(data_review, data_log) 
+    #data_review = pd.read_csv("../apt_review_20220106.csv", encoding="UTF-8")
+    #data_log = pd.read_csv('../abuse_process_log_20220106.csv', encoding="UTF-8")
+    data_review, data_log = data_loader()
+    df_review = pq2df_transformer(data_review)
+    df_log = pq2df_transformer(data_log)
+    data = preprocessing(df_review, df_log) 
+    #data = preprocessing(data_review, data_log) 
     print(data)
 
     morphs = split_morphs(data)
