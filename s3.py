@@ -148,7 +148,7 @@ def main():
     sentences = pad_sequences(sentences, maxlen = 512)
 
     probs = inference(model, sentences) 
-    data['spam_probability'] = [round(prob * 100, 2) for prob in probs]
+    data['spam_probability'] = [np.round(prob * 100, 2) for prob in probs]
     
     print(data)
     # morphs = split_morphs(data)
