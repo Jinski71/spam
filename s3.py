@@ -43,6 +43,7 @@ def data_loader():
     bucket_uri = f's3://{bucket}/{path}'
     data_review = pq.ParquetDataset(bucket_uri, filesystem=fs)
     path = 'ods/hogangnono_abuse_process_log'
+    bucket_uri = f's3://{bucket}/{path}'
     data_log = pq.ParquetDataset(bucket_uri, filesystem=fs)
 
     return data_review, data_log
