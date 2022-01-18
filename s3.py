@@ -109,7 +109,18 @@ def join(morphs, data):
 def postprocess(data):
     data["content"] = data["content"].str.replace("\u200b","")
     return data
- 
+
+@timer
+def load_trained_model():
+    model = load_model("../Spam_Classifier.h5")
+    with open('../Tokenizer.pickle', 'rb') as tokenizer:
+        tokenizer = pickle.load(tokenizer)
+    return model, tokenizer
+
+@timer
+def inference(model, data):
+    round(model.predict(data)[0][0] * 100, 2)
+
 @timer
 def main():
     data_review = pd.read_csv("../apt_review_20220106.csv", encoding="UTF-8")
@@ -126,15 +137,15 @@ def main():
     data = postprocess(data) 
     print(data)
     
-    model = load_model("Spam_Classifier.h5")
-    with open('Tokenizer.pickle', 'rb') as tokenizer:
-        tokenizer = pickle.load(tokenizer)
+    model, tokenizer = load_trained_model()
 
     sentences = tokenizer.texts_to_sequences(data['content'][:10])
     sentences = pad_sequences(sentences, maxlen = 512)
 
-    prob = round(model.predict(sentences)[0][0] * 100, 2)
-    print(f"Spam Probability: {prob}%")
+    prob = inference(model, sentences)
+ 
+    print(prob)
+    #print(f"Spam Probability: {prob}%")
  
     # morphs = split_morphs(data)
     # data = join(morphs, data)
