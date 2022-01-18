@@ -3,18 +3,16 @@
 import s3fs
 import pyarrow.parquet as pq
 import pandas as pd
-import numpy as np
-
+import numpy as np 
 import pickle
 import sys
-import os
-
-os.environ["CUDA_VISIBLE_DEVICES"]='0'
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-
+import os 
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import load_model
 from konlpy.tag import Mecab
+
+os.environ["CUDA_VISIBLE_DEVICES"]='0'
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 def set_pandas_display_options() -> None:
     display = pd.options.display
@@ -37,7 +35,7 @@ def timer(fn):
     return inner
 
 @timer
-def data_loader():
+def s3_data_loader():
     fs = s3fs.S3FileSystem()
     bucket = 'zigbang-data'
     path = 'ods/hogangnono_apt_review'
@@ -88,11 +86,9 @@ def split_morphs(data):
         corpus = data["content"].iloc[i]
         try:
             keywords = tagger.morphs(corpus.upper())
-            morphs.append([keywords])
-
+            morphs.append([keywords]) 
         except KeyboardInterrupt:
-            break
-
+            break 
         except:
             morphs.append([])
 
@@ -126,7 +122,7 @@ def inference(model, data):
 def main():
     #data_review = pd.read_csv("../apt_review_20220106.csv", encoding="UTF-8")
     #data_log = pd.read_csv('../abuse_process_log_20220106.csv', encoding="UTF-8")
-    data_review, data_log = data_loader()
+    data_review, data_log = s3_data_loader()
     df_review = pq2df_transformer(data_review)
     df_log = pq2df_transformer(data_log)
 
@@ -134,13 +130,11 @@ def main():
     df_log = df_log[:10]
 
     data = preprocessing(df_review, df_log) 
-    #data = preprocessing(data_review, data_log) 
-    print(data)
+    #data = preprocessing(data_review, data_log)  
 
     morphs = split_morphs(data)
     data = join(morphs, data)
-    data = postprocess(data) 
-    print(data)
+    data = postprocess(data)  
     
     model, tokenizer = load_trained_model()
 
@@ -151,14 +145,6 @@ def main():
     data['spam_probability'] = [np.round(prob * 100, 2) for prob in probs.ravel()]
     
     print(data)
-    # morphs = split_morphs(data)
-    # data = join(morphs, data)
-    # X_train, X_test, y_train, y_test = split_dataset(data)
-    # vocab_size, X_train_padded, tokenizer = tokenize(X_train)
-    # model = lstm_model(vocab_size)
-    # model = fit(model, X_train_padded, y_train)
-    # evaluate(model, tokenizer, X_test, y_test)
-    # save(model, tokenizer)
 
 if __name__ == "__main__":
     main() 
