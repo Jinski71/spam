@@ -15,7 +15,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import load_model
 from konlpy.tag import Mecab
 
-def set_pandas_display_options() -> None:
+def set_pandas_display_options():
     display = pd.options.display
     display.max_columns = 100
     display.max_rows = 100
