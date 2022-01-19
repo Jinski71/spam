@@ -132,11 +132,12 @@ def inference(model, data):
 def main(): 
     data_review, data_log = mysql_data_loader() 
     data = preprocessing(data_review, data_log)  
-
+    print(data)
     morphs = split_morphs(data)
     data = join(morphs, data)
+    print(data)
     data = postprocess(data)  
-    
+    print(data)
     model, tokenizer = load_trained_model()
 
     sentences = tokenizer.texts_to_sequences(data['content'])
