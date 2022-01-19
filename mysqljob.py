@@ -38,8 +38,10 @@ def mysql_data_loader():
     cur = conn.cursor()
     cur.execute("SELECT * FROM hogangnono.apt_review where date > DATE_ADD(now(), INTERVAL -1 HOUR)")
     data_review = pd.DataFrame(cur.fetchall())
+    data_review.columns = cur.column_names
     cur.execute("SELECT * FROM hogangnono.abuse_process_log where created_at > DATE_ADD(now(), INTERVAL -1 HOUR)")
     data_log = pd.DataFrame(cur.fetchall())
+    data_log.columns = cur.column_names
     return data_review, data_log
 
 @timer
