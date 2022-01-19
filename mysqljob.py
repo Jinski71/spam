@@ -73,19 +73,19 @@ def preprocessing(data_review, data_log):
     # 병합
     data_review = data_review[["id", "content", "is_blocked", "is_deleted", "is_blinded"]]
     data = pd.merge(data_review, data_log.rename(columns={"review_id": "id"}), on="id", how="left")
-
+    print(data)
     # 필터링
     data = data[~((data["is_deleted"] == 1) & (data["is_blocked"] != 1) & (data["is_blinded"] != 1))]  # 자진삭제한 데이터
     data = data[~data["content"].isnull()]  # 내용이 기재되지 않은 데이터
     data = data[data["content"].str.len() > 20]  # 최소 20자 이상 리뷰
-
+    print(data)
     # 스팸 기준: is_blocked = 1이거나, 처리사유가 기재된 데이터
     data["is_spam"] = np.where((data["is_blocked"] == 1) | (~data["reason"].isnull()), 1, 0)
-
+    print(data)
     # 각 문장별, 1회 이상 스팸 처리된 문장은 is_spam에서 1, 나머지는 0으로 처리 (완전 중복문장 제거)
-    data = data.groupby("content").sum()[["is_spam"]]#.reset_index()
+    data = data.groupby("content").sum()[["is_spam"]].reset_index()
     data["is_spam"] = np.where(data["is_spam"] > 0, 1, 0)
-
+    print(data)
     return data
 
 @timer    
@@ -131,13 +131,10 @@ def inference(model, data):
 @timer
 def main(): 
     data_review, data_log = mysql_data_loader() 
-    data = preprocessing(data_review, data_log)  
-    print(data)
+    data = preprocessing(data_review, data_log)    
     morphs = split_morphs(data)
-    data = join(morphs, data)
-    print(data)
-    data = postprocess(data)  
-    print(data)
+    data = join(morphs, data) 
+    data = postprocess(data)   
     model, tokenizer = load_trained_model()
 
     sentences = tokenizer.texts_to_sequences(data['content'])
