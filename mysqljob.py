@@ -83,7 +83,7 @@ def preprocessing(data_review, data_log):
     data["is_spam"] = np.where((data["is_blocked"] == 1) | (~data["reason"].isnull()), 1, 0)
 
     # 각 문장별, 1회 이상 스팸 처리된 문장은 is_spam에서 1, 나머지는 0으로 처리 (완전 중복문장 제거)
-    data = data.groupby("content").sum()[["is_spam"]].reset_index()
+    data = data.groupby("content").sum()[["is_spam"]]#.reset_index()
     data["is_spam"] = np.where(data["is_spam"] > 0, 1, 0)
 
     return data
